@@ -4,7 +4,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F8FC"
+    android:background="#F7F5FF"
     android:fillViewport="true">
 
     <LinearLayout
@@ -16,20 +16,23 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="HealthMate"
+            android:text="♥  HealthMate"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="#1565C0"
-            android:layout_marginTop="24dp"/>
+            android:textColor="#FFFFFF"
+            android:background="@drawable/bg_dashboard_header"
+            android:padding="24dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center_vertical"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Your Daily Health Dashboard"
             android:textSize="16sp"
-            android:textColor="#607D8B"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="30dp"/>
+            android:textColor="#6750A4"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -37,7 +40,7 @@
             android:text="Today's Activity"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="#263238"
+            android:textColor="#4A3678"
             android:layout_marginBottom="16dp"/>
 
         <TextView
@@ -47,7 +50,7 @@
             android:text="Steps Walked: 0"
             android:textSize="20sp"
             android:textColor="#1565C0"
-            android:background="#E3F2FD"
+            android:background="@drawable/bg_steps_cards"
             android:padding="20dp"
             android:layout_marginBottom="16dp"/>
 
@@ -58,7 +61,7 @@
             android:text="Calories Burned: 0 kcal"
             android:textSize="20sp"
             android:textColor="#E65100"
-            android:background="#FFF3E0"
+            android:background="@drawable/bg_calories_card"
             android:padding="20dp"
             android:layout_marginBottom="16dp"/>
 
@@ -69,7 +72,7 @@
             android:text="Water Intake: 0 ml"
             android:textSize="20sp"
             android:textColor="#00838F"
-            android:background="#E0F7FA"
+            android:background="@drawable/bg_water_card"
             android:padding="20dp"
             android:layout_marginBottom="30dp"/>
 
