@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F5F8FC">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Health Record"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#1565C0"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update your saved health information"
+            android:textSize="14sp"
+            android:textColor="#607D8B"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textStyle="bold"
+            android:textColor="#263238"/>
+
+        <EditText
+            android:id="@+id/etEditDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="YYYY-MM-DD"
+            android:inputType="date"
+            android:singleLine="true"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Steps Walked"
+            android:textStyle="bold"
+            android:textColor="#263238"/>
+
+        <EditText
+            android:id="@+id/etEditSteps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter steps"
+            android:inputType="number"
+            android:singleLine="true"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calories Burned (kcal)"
+            android:textStyle="bold"
+            android:textColor="#263238"/>
+
+        <EditText
+            android:id="@+id/etEditCalories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter calories"
+            android:inputType="number"
+            android:singleLine="true"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Water Intake (ml)"
+            android:textStyle="bold"
+            android:textColor="#263238"/>
+
+        <EditText
+            android:id="@+id/etEditWater"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter water intake"
+            android:inputType="number"
+            android:singleLine="true"
+            android:layout_marginBottom="28dp"/>
+
+        <Button
+            android:id="@+id/btnUpdateRecord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update Health Record"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#6750A4"/>
+
+    </LinearLayout>
+</ScrollView>
