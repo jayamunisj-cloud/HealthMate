@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F7F4FF">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="24dp"
+        android:background="#F7F4FF">
+
+    <TextView
+        android:id="@+id/tvSignUpTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Your Account"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#673AB7"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:id="@+id/tvSignUpSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join HealthMate to track your daily wellness"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:layout_marginBottom="32dp" />
+
+    <!-- First Name -->
+    <EditText
+        android:id="@+id/etSignUpFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:hint="First Name"
+        android:inputType="textPersonName"
+        android:singleLine="true"
+        android:maxLength="50"
+        android:padding="14dp"
+        android:background="@drawable/bg_input_field"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Last Name -->
+    <EditText
+        android:id="@+id/etSignUpLastName"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:hint="Last Name"
+        android:inputType="textPersonName"
+        android:singleLine="true"
+        android:maxLength="50"
+        android:padding="14dp"
+        android:background="@drawable/bg_input_field"
+        android:layout_marginBottom="16dp" />
+    <EditText
+        android:id="@+id/etSignUpEmail"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:hint="Email Address"
+        android:inputType="textEmailAddress"
+        android:singleLine="true"
+        android:padding="14dp"
+        android:background="@drawable/bg_input_field"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Mobile Number -->
+    <EditText
+        android:id="@+id/etSignUpMobile"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:hint="Mobile Number (Optional)"
+        android:inputType="phone"
+        android:singleLine="true"
+        android:maxLength="15"
+        android:padding="14dp"
+        android:background="@drawable/bg_input_field"
+        android:layout_marginBottom="16dp" />
+
+
+    <EditText
+        android:id="@+id/etSignUpPassword"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:padding="14dp"
+        android:background="@drawable/bg_input_field"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etSignUpConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:padding="14dp"
+        android:background="@drawable/bg_input_field"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnCreateAccount"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Create Account"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#673AB7"
+        android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvGoToSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:minWidth="48dp"
+            android:gravity="center"
+            android:text="Already have an account? Sign In"
+            android:textSize="14sp"
+            android:textColor="#673AB7"
+            android:paddingHorizontal="12dp"
+            android:layout_marginTop="12dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+</ScrollView>

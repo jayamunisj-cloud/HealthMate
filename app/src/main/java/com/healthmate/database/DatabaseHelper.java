@@ -5,14 +5,30 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.healthmate.PasswordUtils;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "healthmate.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String TABLE_NAME = "health_records";
+
+    public static final String TABLE_USERS = "users";
+    public static final String COL_USER_ID = "user_id";
+    public static final String COL_USERNAME = "username";
+    public static final String COL_EMAIL = "email";
+    public static final String COL_PASSWORD_HASH = "password_hash";
+    public static final String COL_PASSWORD_SALT = "password_salt";
+
+    private static final String CREATE_USERS_TABLE =
+            "CREATE TABLE IF NOT EXISTS " + TABLE_USERS + " (" +
+                    COL_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COL_USERNAME + " TEXT NOT NULL, " +
+                    COL_EMAIL + " TEXT NOT NULL UNIQUE, " +
+                    COL_PASSWORD_HASH + " TEXT NOT NULL, " +
+                    COL_PASSWORD_SALT + " TEXT NOT NULL)";
 
     public static final String COL_ID = "id";
     public static final String COL_DATE = "date";
@@ -35,15 +51,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_WATER + " INTEGER NOT NULL)";
 
         db.execSQL(createTable);
+        db.execSQL(CREATE_USERS_TABLE);
     }
 
     // Handle future database upgrades
     @Override
-    public void onUpgrade(SQLiteDatabase db,
-                          int oldVersion,
-                          int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        if (oldVersion < 2) {
+            db.execSQL(CREATE_USERS_TABLE);
+        }
+
     }
 
     // CREATE: Add a new health record
@@ -136,8 +154,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null
         );
     }
+    public long registerUser(String username, String email, String password) {
 
+        String salt = PasswordUtils.generateSalt();
+        String passwordHash = PasswordUtils.hashPassword(password, salt);
 
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_USERNAME, username);
+        values.put(COL_EMAIL, email.trim().toLowerCase(java.util.Locale.ROOT));
+        values.put(COL_PASSWORD_HASH, passwordHash);
+        values.put(COL_PASSWORD_SALT, salt);
+
+        return db.insert(TABLE_USERS, null, values);
+    }
+    public Cursor getUserByEmail(String email) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        return db.query(
+                TABLE_USERS,
+                null,
+                COL_EMAIL + "=?",
+                new String[]{
+                        email.trim().toLowerCase(java.util.Locale.ROOT)
+                },
+                null,
+                null,
+                null
+        );
+
+    }
+    public boolean verifyUser(String email, String password) {
+
+        try (Cursor cursor = getUserByEmail(email)) {
+
+            if (!cursor.moveToFirst()) {
+                return false;
+            }
+
+            String storedHash = cursor.getString(
+                    cursor.getColumnIndexOrThrow(COL_PASSWORD_HASH)
+            );
+
+            String storedSalt = cursor.getString(
+                    cursor.getColumnIndexOrThrow(COL_PASSWORD_SALT)
+            );
+
+            return PasswordUtils.verifyPassword(
+                    password,
+                    storedSalt,
+                    storedHash
+            );
+        }
+    }
 
 
 }
