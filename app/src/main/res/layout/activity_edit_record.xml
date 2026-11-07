@@ -40,10 +40,13 @@
             android:id="@+id/etEditDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="YYYY-MM-DD"
-            android:inputType="date"
+            android:hint="Select date (YYYY-MM-DD)"
+            android:inputType="none"
+            android:focusable="false"
+            android:clickable="true"
+            android:cursorVisible="false"
             android:singleLine="true"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="20dp" />
 
         <TextView
             android:layout_width="match_parent"

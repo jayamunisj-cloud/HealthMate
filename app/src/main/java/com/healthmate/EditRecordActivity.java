@@ -16,6 +16,8 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 import com.healthmate.database.DatabaseHelper;
+import android.app.DatePickerDialog;
+import java.util.Calendar;
 
 
 public class EditRecordActivity extends AppCompatActivity {
@@ -39,6 +41,42 @@ public class EditRecordActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
 
         etEditDate = findViewById(R.id.etEditDate);
+        etEditDate.setOnClickListener(v -> {
+
+            Calendar calendar = Calendar.getInstance();
+
+            String currentDate = etEditDate.getText().toString().trim();
+
+            if (currentDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                String[] parts = currentDate.split("-");
+                calendar.set(
+                        Integer.parseInt(parts[0]),
+                        Integer.parseInt(parts[1]) - 1,
+                        Integer.parseInt(parts[2])
+                );
+            }
+
+            DatePickerDialog datePicker = new DatePickerDialog(
+                    EditRecordActivity.this,
+                    (view, year, month, dayOfMonth) -> {
+                        String selectedDate = String.format(
+                                Locale.US,
+                                "%04d-%02d-%02d",
+                                year,
+                                month + 1,
+                                dayOfMonth
+                        );
+
+                        etEditDate.setText(selectedDate);
+                    },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+            );
+
+            datePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
+            datePicker.show();
+        });
 
         etEditSteps = findViewById(R.id.etEditSteps);
 
@@ -140,6 +178,15 @@ public class EditRecordActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT
             ).show();
 
+            return;
+        }
+        // Validate maximum allowed values
+        if (steps > 50000 || calories > 10000 || water > 10000) {
+            Toast.makeText(
+                    this,
+                    "Steps max: 50,000 | Calories max: 10,000 | Water max: 10,000 ml",
+                    Toast.LENGTH_LONG
+            ).show();
             return;
         }
         int result = databaseHelper.updateRecord(

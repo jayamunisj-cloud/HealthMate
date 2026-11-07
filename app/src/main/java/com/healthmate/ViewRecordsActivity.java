@@ -14,6 +14,8 @@ import android.widget.EditText;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.Locale;
+import android.app.DatePickerDialog;
+import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -43,6 +45,35 @@ public class ViewRecordsActivity extends AppCompatActivity {
 
         // Initialize Search by Date controls
         etSearchDate = findViewById(R.id.etSearchDate);
+        etSearchDate.setOnClickListener(v -> {
+
+            Calendar calendar = Calendar.getInstance();
+
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePicker = new DatePickerDialog(
+                    ViewRecordsActivity.this,
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+
+                        String selectedDate = String.format(
+                                Locale.US,
+                                "%04d-%02d-%02d",
+                                selectedYear,
+                                selectedMonth + 1,
+                                selectedDay
+                        );
+
+                        etSearchDate.setText(selectedDate);
+                    },
+                    year,
+                    month,
+                    day
+            );
+
+            datePicker.show();
+        });
         btnSearchRecords = findViewById(R.id.btnSearchRecords);
         btnShowAllRecords = findViewById(R.id.btnShowAllRecords);
         btnShowAllRecords.setOnClickListener(v -> {

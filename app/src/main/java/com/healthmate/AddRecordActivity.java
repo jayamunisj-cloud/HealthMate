@@ -16,6 +16,9 @@ import com.healthmate.database.DatabaseHelper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import android.app.DatePickerDialog;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class AddRecordActivity extends AppCompatActivity {
 
@@ -40,9 +43,40 @@ public class AddRecordActivity extends AppCompatActivity {
                     );
                     return insets;
                 }
+
         );
 
         etDate = findViewById(R.id.etDate);
+        etDate.setOnClickListener(v -> {
+
+            Calendar calendar = Calendar.getInstance();
+
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePicker = new DatePickerDialog(
+                    AddRecordActivity.this,
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+
+                        String selectedDate = String.format(
+                                Locale.US,
+                                "%04d-%02d-%02d",
+                                selectedYear,
+                                selectedMonth + 1,
+                                selectedDay
+                        );
+
+                        etDate.setText(selectedDate);
+                    },
+                    year,
+                    month,
+                    day
+            );
+
+            datePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
+            datePicker.show();
+        });
         etSteps = findViewById(R.id.etSteps);
         etCalories = findViewById(R.id.etCalories);
         etWater = findViewById(R.id.etWater);
@@ -51,8 +85,133 @@ public class AddRecordActivity extends AppCompatActivity {
 
         databaseHelper = new DatabaseHelper(this);
 
-        btnSaveRecord.setOnClickListener(v -> saveRecord());
+        btnSaveRecord.setOnClickListener(v -> {
+            if (validateHealthRecord()) {
+                saveRecord();
+            }
+        });
     }
+
+    private boolean validateHealthRecord() {
+
+        String date = etDate.getText().toString().trim();
+        String stepsText = etSteps.getText().toString().trim();
+        String caloriesText = etCalories.getText().toString().trim();
+        String waterText = etWater.getText().toString().trim();
+        boolean isValid = true;
+
+        // Date is required
+        if (date.isEmpty()) {
+            Toast.makeText(
+                    this,
+                    "Please select a date",
+                    Toast.LENGTH_LONG
+            ).show();
+            isValid = false;
+        }
+
+        // Check date format and calendar validity
+        java.text.SimpleDateFormat format =
+                new java.text.SimpleDateFormat(
+                        "yyyy-MM-dd", java.util.Locale.US);
+        format.setLenient(false);
+
+        if (!date.isEmpty()) {
+            try {
+                java.util.Date selectedDate = format.parse(date);
+
+                if (selectedDate == null ||
+                        !format.format(selectedDate).equals(date)) {
+                    etDate.setError("Invalid date");
+                    isValid = false;
+                }
+
+                java.util.Calendar minimum =
+                        java.util.Calendar.getInstance();
+                minimum.clear();
+                minimum.set(2000, java.util.Calendar.JANUARY, 1);
+
+                java.util.Calendar tomorrow =
+                        java.util.Calendar.getInstance();
+                tomorrow.add(java.util.Calendar.DAY_OF_YEAR, 1);
+                tomorrow.set(java.util.Calendar.HOUR_OF_DAY, 0);
+                tomorrow.set(java.util.Calendar.MINUTE, 0);
+                tomorrow.set(java.util.Calendar.SECOND, 0);
+                tomorrow.set(java.util.Calendar.MILLISECOND, 0);
+
+                if (selectedDate.before(minimum.getTime()) ||
+                        !selectedDate.before(tomorrow.getTime())) {
+                    etDate.setError("Select a date from 2000-01-01 to today");
+                    isValid = false;
+                }
+
+            } catch (java.text.ParseException e) {
+                etDate.setError("Please select a valid date");
+                isValid = false;
+            }
+        }
+
+
+        // Steps validation
+        if (!validNumber(stepsText, 50000)) {
+            etSteps.setError("Steps must be between 0 and 50,000");
+            isValid = false;
+        }
+
+        // Calories validation
+        if (!validNumber(caloriesText, 10000)) {
+            etCalories.setError("Calories must be between 0 and 10,000");
+            isValid = false;
+        }
+
+        // Water validation
+        if (!validNumber(waterText, 10000)) {
+            etWater.setError("Water must be between 0 and 10,000 ml");
+            isValid = false;
+        }
+
+        if (!isValid) {
+            StringBuilder errors = new StringBuilder();
+
+            if (etDate.getError() != null) {
+                errors.append("Date: Please select a valid date\n\n");
+            }
+
+            if (etSteps.getError() != null) {
+                errors.append("Steps must be between 0 and 50,000\n\n");
+            }
+
+            if (etCalories.getError() != null) {
+                errors.append("Calories must be between 0 and 10,000\n\n");
+            }
+
+            if (etWater.getError() != null) {
+                errors.append("Water must be between 0 and 10,000 ml\n\n");
+            }
+
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Invalid Health Record")
+                    .setMessage("Please correct the following errors:\n\n" + errors)
+                    .setPositiveButton("OK", null)
+                    .show();
+        }
+
+        return isValid;
+    }
+
+    private boolean validNumber(String value, int maximum) {
+        if (value.isEmpty() || !value.matches("[0-9]+")) {
+            return false;
+        }
+
+        try {
+            long number = Long.parseLong(value);
+            return number <= maximum;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 
     private void saveRecord() {
 
