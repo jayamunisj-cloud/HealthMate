@@ -243,6 +243,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
+    public boolean changePassword(
+            String email,
+            String currentPassword,
+            String newPassword) {
+
+        if (email == null || email.trim().isEmpty()
+                || currentPassword == null
+                || newPassword == null
+                || newPassword.length() < 12
+                || currentPassword.equals(newPassword)) {
+            return false;
+        }
+
+        String normalizedEmail =
+                email.trim().toLowerCase(java.util.Locale.ROOT);
+
+        // Verify the user's current password
+        if (!validateUser(normalizedEmail, currentPassword)) {
+            return false;
+        }
+
+        // Generate a new salt and password hash
+        String newSalt = PasswordUtils.generateSalt();
+
+        String newPasswordHash =
+                PasswordUtils.hashPassword(newPassword, newSalt);
+
+        // Store only the hash and salt, never the password
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(COL_PASSWORD_HASH, newPasswordHash);
+        values.put(COL_PASSWORD_SALT, newSalt);
+
+        int rowsUpdated = db.update(
+                TABLE_USERS,
+                values,
+                COL_EMAIL + "=?",
+                new String[]{normalizedEmail}
+        );
+
+        return rowsUpdated > 0;
+    }
 
     public Cursor getUserByEmail(String email) {
 
@@ -323,5 +367,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
     }
+
 
 }

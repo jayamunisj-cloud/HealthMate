@@ -14,6 +14,20 @@
         android:orientation="vertical"
         android:padding="24dp">
 
+        <!-- Back arrow at the top-left -->
+        <TextView
+            android:id="@+id/tvBackToDashboard"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="←"
+            android:textSize="28sp"
+            android:textColor="#6C4AD2"
+            android:gravity="center"
+            android:layout_gravity="start"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Back to Dashboard" />
+
         <!-- Purple Profile Header -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +67,6 @@
                     android:textSize="12sp" />
 
             </LinearLayout>
-
         </LinearLayout>
 
         <!-- Profile Avatar -->
@@ -64,13 +77,17 @@
             android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivProfilePhoto"
                 android:layout_width="76dp"
                 android:layout_height="76dp"
                 android:background="@drawable/bg_dashboard_header"
                 android:padding="18dp"
                 app:srcCompat="@drawable/ic_nav_profile"
                 app:tint="#FFFFFF"
-                android:contentDescription="Profile avatar" />
+                android:contentDescription="Tap to change profile photo"
+                android:clickable="true"
+                android:focusable="true" />
+
 
         </LinearLayout>
 
@@ -112,7 +129,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-
             <!-- Email Row -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -121,7 +137,6 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -129,7 +144,6 @@
                     app:srcCompat="@android:drawable/ic_dialog_email"
                     app:tint="#673AB7"
                     android:contentDescription="Email icon" />
-
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -156,7 +170,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-
             <!-- Phone Row -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -165,7 +178,6 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-                <!-- Purple Phone Icon -->
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -173,7 +185,6 @@
                     android:src="@drawable/ic_profile_phone"
                     android:contentDescription="Phone icon" />
 
-                <!-- Mobile Number Details -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -197,52 +208,49 @@
                         android:textSize="16sp" />
 
                 </LinearLayout>
-
             </LinearLayout>
 
             <!-- Date of Birth -->
-                    <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_profile_birthday"
+                    android:contentDescription="Birthday calendar" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date of Birth"
+                        android:textColor="#777777"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvProfileDob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_profile_birthday"
-                            android:contentDescription="Birthday calendar" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="12dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Date of Birth"
-                                android:textColor="#777777"
-                                android:textSize="13sp" />
-
-                            <TextView
-                                android:id="@+id/tvProfileDob"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:text="Not provided"
-                                android:textColor="#1D1748"
-                                android:textSize="16sp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
+                        android:layout_marginTop="6dp"
+                        android:text="Not provided"
+                        android:textColor="#1D1748"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
+            </LinearLayout>
 
+        </LinearLayout>
 
         <!-- Logout button -->
         <Button
@@ -255,8 +263,7 @@
             android:textColor="#FFFFFF"
             android:backgroundTint="#673AB7" />
 
-
-        <!-- Edit Profile Button -->
+        <!-- Edit Profile button -->
         <Button
             android:id="@+id/btnEditProfile"
             android:layout_width="match_parent"
@@ -267,22 +274,17 @@
             android:textColor="#673AB7"
             android:backgroundTint="#E9DFF8" />
 
-
-        <!-- Back to dashboard -->
-        <TextView
-            android:id="@+id/tvBackToDashboard"
+        <!-- Change Password button -->
+        <Button
+            android:id="@+id/btnOpenChangePassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:padding="12dp"
-            android:text="Back to Dashboard"
-            android:textColor="#673AB7"
+            android:layout_height="52dp"
+            android:layout_marginTop="12dp"
+            android:text="Change Password"
+            android:textAllCaps="false"
             android:textSize="15sp"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true" />
+            android:textColor="#6C4AD2"
+            android:backgroundTint="#E8DEFF" />
 
     </LinearLayout>
-
 </ScrollView>
-

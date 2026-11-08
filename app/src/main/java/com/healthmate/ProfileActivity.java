@@ -6,6 +6,18 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.net.Uri;
+import android.widget.ImageView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +32,21 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Button btnLogout;
     private TextView tvBackToDashboard;
+
+    private ImageView ivProfilePhoto;
+
+
+    private final ActivityResultLauncher<String> photoPickerLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.GetContent(),
+                    uri -> {
+                        if (uri != null) {
+                            saveProfilePhoto(uri);
+                        }
+                    }
+            );
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +68,14 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_profile);
+
+        ivProfilePhoto = findViewById(R.id.ivProfilePhoto);
+        loadProfilePhoto();
+
+        ivProfilePhoto.setOnClickListener(v -> {
+            photoPickerLauncher.launch("image/*");
+        });
+
 
         // Connect Profile information
         tvProfileName = findViewById(R.id.tvProfileName);
@@ -66,6 +101,18 @@ public class ProfileActivity extends AppCompatActivity {
             );
             startActivity(intent);
         });
+
+        Button btnOpenChangePassword =
+                findViewById(R.id.btnOpenChangePassword);
+
+        btnOpenChangePassword.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    ProfileActivity.this,
+                    ChangePasswordActivity.class
+            );
+            startActivity(intent);
+        });
+
 
         // Return to Dashboard
         tvBackToDashboard.setOnClickListener(v -> finish());
@@ -96,6 +143,87 @@ public class ProfileActivity extends AppCompatActivity {
             finish();
         });
     }
+
+    private File getProfilePhotoFile() {
+        String email = getSharedPreferences(
+                "HealthMateSession", MODE_PRIVATE
+        ).getString("userEmail", "");
+
+        if (email.isEmpty()) {
+            return null;
+        }
+
+        String fileName = "profile_" + Integer.toHexString(
+                email.trim().toLowerCase(java.util.Locale.ROOT).hashCode()
+        ) + ".png";
+
+        return new File(getFilesDir(), fileName);
+    }
+
+    private void saveProfilePhoto(Uri uri) {
+        File photoFile = getProfilePhotoFile();
+
+        if (photoFile == null) {
+            return;
+        }
+
+        try (InputStream inputStream =
+                     getContentResolver().openInputStream(uri)) {
+
+            if (inputStream == null) {
+                return;
+            }
+
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+            if (bitmap == null) {
+                return;
+            }
+
+            try (FileOutputStream outputStream =
+                         new FileOutputStream(photoFile)) {
+
+                if (!bitmap.compress(
+                        Bitmap.CompressFormat.PNG,
+                        100,
+                        outputStream)) {
+                    throw new java.io.IOException("Could not save photo");
+                }
+            }
+
+
+            bitmap.recycle();
+
+            runOnUiThread(() -> {
+                loadProfilePhoto();
+            });
+
+
+        } catch (Exception e) {
+            android.widget.Toast.makeText(
+                    this,
+                    "Could not save profile photo",
+                    android.widget.Toast.LENGTH_SHORT
+            ).show();
+        }
+    }
+
+    private void loadProfilePhoto() {
+        File photoFile = getProfilePhotoFile();
+
+        if (photoFile != null && photoFile.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(
+                    photoFile.getAbsolutePath()
+            );
+
+            if (bitmap != null) {
+                ivProfilePhoto.setImageTintList(null);
+                ivProfilePhoto.setPadding(0, 0, 0, 0);
+                ivProfilePhoto.setImageBitmap(bitmap);
+            }
+        }
+    }
+
 
     // Refresh profile whenever this screen becomes visible
     @Override
