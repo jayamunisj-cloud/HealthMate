@@ -255,6 +255,19 @@
             android:textColor="#FFFFFF"
             android:backgroundTint="#673AB7" />
 
+
+        <!-- Edit Profile Button -->
+        <Button
+            android:id="@+id/btnEditProfile"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="24dp"
+            android:text="Edit Profile"
+            android:textAllCaps="false"
+            android:textColor="#673AB7"
+            android:backgroundTint="#E9DFF8" />
+
+
         <!-- Back to dashboard -->
         <TextView
             android:id="@+id/tvBackToDashboard"

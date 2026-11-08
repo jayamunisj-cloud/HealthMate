@@ -213,6 +213,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(TABLE_USERS, null, values);
     }
 
+    public int updateUserProfile(
+            String email,
+            String firstName,
+            String lastName,
+            String mobile,
+            String dateOfBirth) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(COL_FIRST_NAME, firstName.trim());
+        values.put(COL_LAST_NAME, lastName.trim());
+        values.put(
+                COL_USERNAME,
+                firstName.trim() + " " + lastName.trim()
+        );
+        values.put(COL_MOBILE, mobile.trim());
+        values.put(COL_DATE_OF_BIRTH, dateOfBirth);
+
+        return db.update(
+                TABLE_USERS,
+                values,
+                COL_EMAIL + "=?",
+                new String[]{
+                        email.trim().toLowerCase(java.util.Locale.ROOT)
+                }
+        );
+    }
+
+
     public Cursor getUserByEmail(String email) {
 
         SQLiteDatabase db = this.getReadableDatabase();

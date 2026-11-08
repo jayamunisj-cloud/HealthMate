@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F4FF"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Edit Profile"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#673AB7"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Update your personal information"
+            android:textSize="14sp"
+            android:textColor="#777777"
+            android:gravity="center" />
+
+        <EditText
+            android:id="@+id/etEditFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="36dp"
+            android:hint="First Name"
+            android:inputType="textPersonName"
+            android:padding="14dp"
+            android:background="@drawable/bg_input_field" />
+
+        <EditText
+            android:id="@+id/etEditLastName"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            android:hint="Last Name"
+            android:inputType="textPersonName"
+            android:padding="14dp"
+            android:background="@drawable/bg_input_field" />
+
+        <EditText
+            android:id="@+id/etEditMobile"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            android:hint="Mobile Number (Optional)"
+            android:inputType="phone"
+            android:padding="14dp"
+            android:background="@drawable/bg_input_field" />
+
+        <TextView
+            android:id="@+id/tvEditDob"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:padding="14dp"
+            android:hint="Date of Birth"
+            android:textSize="16sp"
+            android:textColor="#1D1748"
+            android:background="@drawable/bg_input_field"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <Button
+            android:id="@+id/btnSaveProfile"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="32dp"
+            android:text="Save Changes"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#673AB7" />
+
+        <TextView
+            android:id="@+id/tvCancelEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:padding="12dp"
+            android:text="Cancel"
+            android:textSize="15sp"
+            android:textColor="#673AB7"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+</ScrollView>
