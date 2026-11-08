@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:text="Welcome Back!"
+            android:text="HealthMate Profile"
             android:textColor="#673AB7"
             android:textSize="28sp"
             android:textStyle="bold"

@@ -11,7 +11,7 @@ import com.healthmate.PasswordUtils;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "healthmate.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     public static final String TABLE_NAME = "health_records";
 
@@ -38,7 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_LAST_NAME + " TEXT, " +
                     COL_MOBILE + " TEXT, " +
                     COL_DATE_OF_BIRTH + " TEXT)";
-
+    private final Context context;
 
     public static final String COL_ID = "id";
     public static final String COL_DATE = "date";
@@ -48,6 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context.getApplicationContext();
     }
 
     // Create the database table
@@ -58,7 +59,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_DATE + " TEXT NOT NULL, " +
                 COL_STEPS + " INTEGER NOT NULL, " +
                 COL_CALORIES + " INTEGER NOT NULL, " +
-                COL_WATER + " INTEGER NOT NULL)";
+                COL_WATER + " INTEGER NOT NULL, " +
+                "user_id INTEGER)";
 
         db.execSQL(createTable);
         db.execSQL(CREATE_USERS_TABLE);
@@ -88,12 +90,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + TABLE_USERS +
                     " ADD COLUMN " + COL_DATE_OF_BIRTH + " TEXT");
         }
+
+        if (oldVersion < 5) {
+            db.execSQL(
+                    "ALTER TABLE " + TABLE_NAME +
+                            " ADD COLUMN user_id INTEGER"
+            );
+        }
+
     }
 
-
     // CREATE: Add a new health record
+
     public long addRecord(String date, int steps,
                           int calories, int water) {
+
+        // Get the currently signed-in user's email
+        long userId = getCurrentUserId();
+
+        // Never save a record without a valid user
+        if (userId == -1) {
+            return -1;
+        }
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -102,28 +120,71 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_STEPS, steps);
         values.put(COL_CALORIES, calories);
         values.put(COL_WATER, water);
+        values.put(COL_USER_ID, userId);
 
         return db.insert(TABLE_NAME, null, values);
     }
 
+
     // READ: Retrieve all health records
+
     public Cursor getAllRecords() {
+
+        // Get the signed-in user's email
+        String email = context.getSharedPreferences(
+                "HealthMateSession",
+                Context.MODE_PRIVATE
+        ).getString("userEmail", null);
+
+        // Find the signed-in user's ID
+        long userId = getUserIdByEmail(email);
+
         SQLiteDatabase db = this.getReadableDatabase();
 
+        // Return no records if there is no valid user
+        if (userId == -1) {
+            return db.query(
+                    TABLE_NAME,
+                    null,
+                    "1=0",
+                    null,
+                    null,
+                    null,
+                    null
+            );
+        }
+
+        // Retrieve only this user's records
         return db.query(
                 TABLE_NAME,
                 null,
-                null,
-                null,
+                COL_USER_ID + "=?",
+                new String[]{String.valueOf(userId)},
                 null,
                 null,
                 COL_DATE + " DESC, " + COL_ID + " DESC"
         );
     }
 
+
     // UPDATE: Modify an existing health record
+
     public int updateRecord(int id, String date,
                             int steps, int calories, int water) {
+
+        // Get the currently signed-in user's email
+        String email = context.getSharedPreferences(
+                "HealthMateSession",
+                Context.MODE_PRIVATE
+        ).getString("userEmail", null);
+
+        // Find the signed-in user's ID
+        long userId = getUserIdByEmail(email);
+
+        // Never update records without a valid user
+        if (userId == -1) {
+            return 0;
+        }
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -133,54 +194,133 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_CALORIES, calories);
         values.put(COL_WATER, water);
 
+        // Update only when the record belongs to this user
         return db.update(
                 TABLE_NAME,
                 values,
-                COL_ID + "=?",
-                new String[]{String.valueOf(id)}
+                COL_ID + "=? AND " + COL_USER_ID + "=?",
+                new String[]{
+                        String.valueOf(id),
+                        String.valueOf(userId)
+                }
         );
     }
 
     // DELETE: Remove a health record
+
     public int deleteRecord(int id) {
+
+        // Get the currently signed-in user's email
+        String email = context.getSharedPreferences(
+                "HealthMateSession",
+                Context.MODE_PRIVATE
+        ).getString("userEmail", null);
+
+        // Find the signed-in user's ID
+        long userId = getUserIdByEmail(email);
+
+        // Never delete records without a valid user
+        if (userId == -1) {
+            return 0;
+        }
+
         SQLiteDatabase db = this.getWritableDatabase();
 
+        // Delete only if the record belongs to this user
         return db.delete(
                 TABLE_NAME,
-                COL_ID + "=?",
-                new String[]{String.valueOf(id)}
+                COL_ID + "=? AND " + COL_USER_ID + "=?",
+                new String[]{
+                        String.valueOf(id),
+                        String.valueOf(userId)
+                }
         );
     }
 
+
     // SEARCH: Retrieve records for a selected date
+
     public Cursor getRecordsByDate(String date) {
+
+        // Get the currently signed-in user's email
+        String email = context.getSharedPreferences(
+                "HealthMateSession",
+                Context.MODE_PRIVATE
+        ).getString("userEmail", null);
+
+        // Find the signed-in user's ID
+        long userId = getUserIdByEmail(email);
+
         SQLiteDatabase db = this.getReadableDatabase();
 
+        // Return no records if the user is not signed in
+        if (userId == -1) {
+            return db.query(
+                    TABLE_NAME,
+                    null,
+                    "1=0",
+                    null,
+                    null,
+                    null,
+                    null
+            );
+        }
+
+        // Search only records owned by the signed-in user
         return db.query(
                 TABLE_NAME,
                 null,
-                COL_DATE + "=?",
-                new String[]{date},
+                COL_DATE + "=? AND " + COL_USER_ID + "=?",
+                new String[]{
+                        date,
+                        String.valueOf(userId)
+                },
                 null,
                 null,
                 COL_ID + " DESC"
         );
     }
 
+
     public Cursor getRecordById(int id) {
+
+        String email = context.getSharedPreferences(
+                "HealthMateSession",
+                Context.MODE_PRIVATE
+        ).getString("userEmail", null);
+
+        long userId = getUserIdByEmail(email);
 
         SQLiteDatabase db = this.getReadableDatabase();
 
+        // Do not return records without a valid signed-in user.
+        if (userId == -1) {
+            return db.query(
+                    TABLE_NAME,
+                    null,
+                    "1=0",
+                    null,
+                    null,
+                    null,
+                    null
+            );
+        }
+
+        // Match both the record ID and its owner.
         return db.query(
                 TABLE_NAME,
                 null,
-                COL_ID + "=?",
-                new String[]{String.valueOf(id)},
+                COL_ID + "=? AND " + COL_USER_ID + "=?",
+                new String[]{
+                        String.valueOf(id),
+                        String.valueOf(userId)
+                },
                 null,
                 null,
                 null
         );
     }
+
 
     public long registerUser(String firstName, String lastName,
                              String email, String mobile,
@@ -287,7 +427,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return rowsUpdated > 0;
     }
+    private long getCurrentUserId() {
 
+        android.content.SharedPreferences session =
+                context.getSharedPreferences(
+                        "HealthMateSession",
+                        Context.MODE_PRIVATE
+                );
+
+        boolean isLoggedIn =
+                session.getBoolean("isLoggedIn", false);
+
+        String email =
+                session.getString("userEmail", null);
+
+        // Never allow record access without a valid session
+        if (!isLoggedIn || email == null || email.trim().isEmpty()) {
+            return -1;
+        }
+
+        // Confirm the account exists in SQLite
+        return getUserIdByEmail(email);
+    }
     public Cursor getUserByEmail(String email) {
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -366,6 +527,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } finally {
             cursor.close();
         }
+    }
+
+    public long getUserIdByEmail(String email) {
+
+        if (email == null || email.trim().isEmpty()) {
+            return -1;
+        }
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try (Cursor cursor = db.query(
+                TABLE_USERS,
+                new String[]{COL_USER_ID},
+                COL_EMAIL + "=?",
+                new String[]{
+                        email.trim().toLowerCase(java.util.Locale.ROOT)
+                },
+                null,
+                null,
+                null
+        )) {
+            if (cursor.moveToFirst()) {
+                return cursor.getLong(0);
+            }
+        }
+
+        return -1;
     }
 
 

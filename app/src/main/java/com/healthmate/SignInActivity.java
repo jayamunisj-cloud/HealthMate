@@ -81,11 +81,26 @@ public class SignInActivity extends AppCompatActivity {
 
         if (isValid) {
 
-            getSharedPreferences("HealthMateSession", MODE_PRIVATE)
-                    .edit()
+            String normalizedEmail =
+                    email.trim().toLowerCase(java.util.Locale.ROOT);
+
+            boolean sessionSaved = getSharedPreferences(
+                    "HealthMateSession",
+                    MODE_PRIVATE
+            ).edit()
+                    .clear()
                     .putBoolean("isLoggedIn", true)
-                    .putString("userEmail", email)
-                    .apply();
+                    .putString("userEmail", normalizedEmail)
+                    .commit();
+
+            if (!sessionSaved) {
+                Toast.makeText(
+                        this,
+                        "Unable to save sign-in session. Please try again.",
+                        Toast.LENGTH_SHORT
+                ).show();
+                return;
+            }
 
             Toast.makeText(
                     this,

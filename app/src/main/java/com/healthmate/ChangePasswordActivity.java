@@ -72,12 +72,31 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 return;
             }
 
-            if (newPassword.length() < 12) {
+            if (newPassword.length() < 10) {
                 etNewPassword.setError(
-                        "Use at least 12 characters"
+                        "Use at least 10 characters"
                 );
                 return;
             }
+
+            // Require at least one capital letter
+            if (!newPassword.matches("(?s).*[A-Z].*")) {
+                etNewPassword.setError(
+                        "Password must contain at least 1 capital letter (A-Z)"
+                );
+                etNewPassword.requestFocus();
+                return;
+            }
+
+            // Require at least one special symbol
+            if (!newPassword.matches("(?s).*[^a-zA-Z0-9\\s].*")) {
+                etNewPassword.setError(
+                        "Password must contain at least 1 special symbol (@, #, !, $)"
+                );
+                etNewPassword.requestFocus();
+                return;
+            }
+
 
             if (newPassword.equals(currentPassword)) {
                 etNewPassword.setError(

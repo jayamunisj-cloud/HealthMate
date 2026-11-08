@@ -35,7 +35,33 @@ public class ViewRecordsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        boolean isLoggedIn = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getBoolean("isLoggedIn", false);
 
+        String userEmail = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getString("userEmail", "");
+
+        if (!isLoggedIn || userEmail == null || userEmail.trim().isEmpty()) {
+
+            Toast.makeText(
+                    this,
+                    "Please sign in to view health records",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            Intent intent = new Intent(
+                    ViewRecordsActivity.this,
+                    SignInActivity.class
+            );
+
+            startActivity(intent);
+            finish();
+            return;
+        }
         setContentView(R.layout.activity_view_records);
 
         recordsContainer =
@@ -120,6 +146,30 @@ public class ViewRecordsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        boolean isLoggedIn = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getBoolean("isLoggedIn", false);
+
+        String userEmail = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getString("userEmail", "");
+
+        if (!isLoggedIn || userEmail == null || userEmail.trim().isEmpty()) {
+
+            Intent intent = new Intent(
+                    ViewRecordsActivity.this,
+                    SignInActivity.class
+            );
+
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        // Refresh only the signed-in user's records
         displayRecords();
     }
     private void displayRecords() {

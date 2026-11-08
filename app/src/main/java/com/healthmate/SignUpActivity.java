@@ -201,6 +201,22 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        // Validate optional international mobile number
+        if (!mobile.isEmpty()) {
+
+            // International format: + followed by 8 to 15 digits
+            if (!mobile.matches("^\\+[1-9]\\d{7,14}$")) {
+
+                etMobile.setError(
+                        "Enter your number with country code (e.g. +94771234567)"
+                );
+
+                etMobile.requestFocus();
+                return;
+            }
+        }
+
+
         // Validate Date of Birth
         if (!dateOfBirth.matches(
                 "\\d{2}/\\d{2}/\\d{4}"
@@ -216,15 +232,34 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         // Validate password length
-        if (password.length() < 8) {
 
+        // Password must have at least 12 characters
+        if (password.length() < 10) {
             etPassword.setError(
-                    "Password must have at least 8 characters"
+                    "Password must contain at least 10 characters"
             );
-
             etPassword.requestFocus();
             return;
         }
+
+        // Password must contain an uppercase letter
+        if (!password.matches("(?s).*[A-Z].*")) {
+            etPassword.setError(
+                    "Password must contain at least 1 capital letter (A-Z)"
+            );
+            etPassword.requestFocus();
+            return;
+        }
+
+        // Password must contain a special symbol
+        if (!password.matches("(?s).*[^a-zA-Z0-9\\s].*")) {
+            etPassword.setError(
+                    "Password must contain at least 1 special symbol (@, #, !, $)"
+            );
+            etPassword.requestFocus();
+            return;
+        }
+
 
         // Check matching passwords
         if (!password.equals(confirmPassword)) {

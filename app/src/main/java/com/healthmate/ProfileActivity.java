@@ -118,16 +118,26 @@ public class ProfileActivity extends AppCompatActivity {
         tvBackToDashboard.setOnClickListener(v -> finish());
 
         // Log out
+        // Log out securely
         btnLogout.setOnClickListener(v -> {
 
-            getSharedPreferences(
+            boolean sessionCleared = getSharedPreferences(
                     "HealthMateSession",
                     MODE_PRIVATE
             ).edit()
-                    .remove("isLoggedIn")
-                    .remove("userEmail")
-                    .apply();
+                    .clear()
+                    .commit();
 
+            if (!sessionCleared) {
+                android.widget.Toast.makeText(
+                        ProfileActivity.this,
+                        "Unable to sign out. Please try again.",
+                        android.widget.Toast.LENGTH_SHORT
+                ).show();
+                return;
+            }
+
+            // Return to Dashboard with the previous activity stack cleared
             Intent intent = new Intent(
                     ProfileActivity.this,
                     MainActivity.class

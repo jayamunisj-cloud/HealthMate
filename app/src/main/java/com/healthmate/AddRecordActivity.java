@@ -19,6 +19,7 @@ import java.util.Locale;
 import android.app.DatePickerDialog;
 import java.util.Calendar;
 import java.util.Locale;
+import android.content.Intent;
 
 public class AddRecordActivity extends AppCompatActivity {
 
@@ -28,6 +29,34 @@ public class AddRecordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        boolean isLoggedIn = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getBoolean("isLoggedIn", false);
+
+        String userEmail = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getString("userEmail", "");
+
+        if (!isLoggedIn || userEmail == null || userEmail.trim().isEmpty()) {
+
+            Toast.makeText(
+                    this,
+                    "Please sign in to add health records",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            Intent intent = new Intent(
+                    AddRecordActivity.this,
+                    SignInActivity.class
+            );
+
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_record);
@@ -283,7 +312,28 @@ public class AddRecordActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        boolean isLoggedIn = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getBoolean("isLoggedIn", false);
+
+        String userEmail = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getString("userEmail", "");
+
+        if (!isLoggedIn || userEmail == null || userEmail.trim().isEmpty()) {
+            startActivity(new Intent(
+                    AddRecordActivity.this,
+                    SignInActivity.class
+            ));
+            finish();
+        }
+    }
     @Override
     protected void onDestroy() {
         if (databaseHelper != null) {

@@ -18,6 +18,7 @@ import java.util.Locale;
 import com.healthmate.database.DatabaseHelper;
 import android.app.DatePickerDialog;
 import java.util.Calendar;
+import android.content.Intent;
 
 
 public class EditRecordActivity extends AppCompatActivity {
@@ -36,6 +37,33 @@ public class EditRecordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        boolean isLoggedIn = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getBoolean("isLoggedIn", false);
+
+        String userEmail = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getString("userEmail", "");
+
+        if (!isLoggedIn || userEmail == null || userEmail.trim().isEmpty()) {
+
+            Toast.makeText(
+                    this,
+                    "Please sign in to edit health records",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            Intent intent = new Intent(
+                    EditRecordActivity.this,
+                    SignInActivity.class
+            );
+
+            startActivity(intent);
+            finish();
+            return;
+        }
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_record);
         databaseHelper = new DatabaseHelper(this);
@@ -256,6 +284,33 @@ public class EditRecordActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        boolean isLoggedIn = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getBoolean("isLoggedIn", false);
+
+        String userEmail = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getString("userEmail", "");
+
+        if (!isLoggedIn || userEmail == null || userEmail.trim().isEmpty()) {
+
+            Intent intent = new Intent(
+                    EditRecordActivity.this,
+                    SignInActivity.class
+            );
+
+            startActivity(intent);
+            finish();
+            return;
+        }
     }
 
 }
