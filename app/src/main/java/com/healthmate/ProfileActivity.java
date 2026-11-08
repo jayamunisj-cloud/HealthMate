@@ -14,9 +14,11 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView tvProfileName;
     private TextView tvProfileEmail;
     private TextView tvProfileMobile;
+    private TextView tvProfileDob;
 
     private Button btnLogout;
     private TextView tvBackToDashboard;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvProfileName = findViewById(R.id.tvProfileName);
         tvProfileEmail = findViewById(R.id.tvProfileEmail);
         tvProfileMobile = findViewById(R.id.tvProfileMobile);
+        tvProfileDob = findViewById(R.id.tvProfileDob);
 
 // Get the signed-in user's email
         String userEmail = getSharedPreferences(
@@ -87,6 +90,33 @@ public class ProfileActivity extends AppCompatActivity {
                                     ? "Not provided"
                                     : mobile
                     );
+
+                    // DOB
+
+                    int dobIndex = cursor.getColumnIndex("date_of_birth");
+
+                    if (dobIndex != -1) {
+                        String dob = cursor.getString(dobIndex);
+
+                        if (dob != null && !dob.trim().isEmpty()) {
+
+                            // Convert YYYY-MM-DD to DD/MM/YYYY
+                            String[] parts = dob.split("-");
+
+                            if (parts.length == 3) {
+                                tvProfileDob.setText(
+                                        parts[2] + "/" + parts[1] + "/" + parts[0]
+                                );
+                            } else {
+                                tvProfileDob.setText(dob);
+                            }
+
+                        } else {
+                            tvProfileDob.setText("Not provided");
+                        }
+                    }
+
+
                 }
             } finally {
                 databaseHelper.close();

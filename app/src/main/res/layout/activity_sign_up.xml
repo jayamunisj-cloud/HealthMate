@@ -86,8 +86,43 @@
         android:background="@drawable/bg_input_field"
         android:layout_marginBottom="16dp" />
 
+        <!-- Date of Birth -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_input_field"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
 
-    <EditText
+            <TextView
+                android:id="@+id/etSignUpDob"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:hint="Date of Birth"
+                android:textColor="#24164F"
+                android:textColorHint="#999999"
+                android:textSize="16sp"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <ImageView
+                android:id="@+id/ivDobCalendar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_my_calendar"
+                android:contentDescription="Choose date of birth"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+
+        <EditText
         android:id="@+id/etSignUpPassword"
         android:layout_width="match_parent"
         android:layout_height="52dp"

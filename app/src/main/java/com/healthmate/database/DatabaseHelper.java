@@ -11,7 +11,7 @@ import com.healthmate.PasswordUtils;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "healthmate.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public static final String TABLE_NAME = "health_records";
 
@@ -21,9 +21,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_FIRST_NAME = "first_name";
     public static final String COL_LAST_NAME = "last_name";
     public static final String COL_MOBILE = "mobile";
+    public static final String COL_DATE_OF_BIRTH = "date_of_birth";
     public static final String COL_EMAIL = "email";
     public static final String COL_PASSWORD_HASH = "password_hash";
     public static final String COL_PASSWORD_SALT = "password_salt";
+
 
     private static final String CREATE_USERS_TABLE =
             "CREATE TABLE IF NOT EXISTS " + TABLE_USERS + " (" +
@@ -34,7 +36,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_PASSWORD_SALT + " TEXT NOT NULL, " +
                     COL_FIRST_NAME + " TEXT, " +
                     COL_LAST_NAME + " TEXT, " +
-                    COL_MOBILE + " TEXT)";
+                    COL_MOBILE + " TEXT, " +
+                    COL_DATE_OF_BIRTH + " TEXT)";
+
 
     public static final String COL_ID = "id";
     public static final String COL_DATE = "date";
@@ -61,12 +65,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Handle future database upgrades
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         if (oldVersion < 2) {
             db.execSQL(CREATE_USERS_TABLE);
         }
+
         if (oldVersion < 3) {
             db.execSQL("ALTER TABLE " + TABLE_USERS +
                     " ADD COLUMN " + COL_FIRST_NAME + " TEXT");
@@ -77,7 +83,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + TABLE_USERS +
                     " ADD COLUMN " + COL_MOBILE + " TEXT");
         }
+
+        if (oldVersion < 4) {
+            db.execSQL("ALTER TABLE " + TABLE_USERS +
+                    " ADD COLUMN " + COL_DATE_OF_BIRTH + " TEXT");
+        }
     }
+
 
     // CREATE: Add a new health record
     public long addRecord(String date, int steps,
@@ -169,8 +181,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null
         );
     }
+
     public long registerUser(String firstName, String lastName,
-                             String email, String mobile, String password) {
+                             String email, String mobile,
+                             String dateOfBirth, String password) {
 
         String salt = PasswordUtils.generateSalt();
         String passwordHash = PasswordUtils.hashPassword(password, salt);
@@ -178,16 +192,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+
         values.put(COL_USERNAME, firstName.trim() + " " + lastName.trim());
         values.put(COL_FIRST_NAME, firstName.trim());
         values.put(COL_LAST_NAME, lastName.trim());
         values.put(COL_MOBILE, mobile.trim());
         values.put(COL_EMAIL, email.trim().toLowerCase(java.util.Locale.ROOT));
+
+        // Save birthday as YYYY-MM-DD in SQLite
+        String[] dateParts = dateOfBirth.split("/");
+
+        String databaseDate = dateParts[2] + "-" +
+                dateParts[1] + "-" + dateParts[0];
+
+        values.put(COL_DATE_OF_BIRTH, databaseDate);
+
         values.put(COL_PASSWORD_HASH, passwordHash);
         values.put(COL_PASSWORD_SALT, salt);
 
         return db.insert(TABLE_USERS, null, values);
     }
+
     public Cursor getUserByEmail(String email) {
 
         SQLiteDatabase db = this.getReadableDatabase();
