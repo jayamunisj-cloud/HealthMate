@@ -1,95 +1,776 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F5FF"
-    android:fillViewport="true">
+    android:orientation="vertical"
+    android:background="#F7F5FF">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- HealthMate Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_dashboard_header"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <!-- HealthMate Logo -->
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_healthmate_logo"
+                    android:contentDescription="HealthMate logo" />
+
+                <!-- App Name and Subtitle -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HealthMate"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Track • Record • Stay Healthy"
+                        android:textColor="#F1E8FF"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Greeting and Date Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Profile Avatar -->
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_dashboard_header"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_nav_profile"
+                    app:tint="#FFFFFF"
+                    android:contentDescription="Profile avatar" />
+
+
+                <!-- Greeting -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvDashboardGreeting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hello, User!"
+                        android:textColor="#24164F"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Here's your health summary"
+                        android:textColor="#675B83"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+                <!-- Date -->
+                <TextView
+                    android:id="@+id/tvDashboardDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_input_field"
+                    android:padding="8dp"
+                    android:text="Today"
+                    android:textColor="#673AB7"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:text="Today's Activity"
+                android:textColor="#24164F"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="28dp"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <!-- Steps card -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_water_card"
+                    android:backgroundTint="#E5F7EB"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginBottom="2dp"
+                        android:src="@drawable/ic_activity_steps"
+                        android:contentDescription="Steps icon" />
+
+
+                    <TextView
+                        android:id="@+id/txtSteps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="0"
+                        android:textColor="#24164F"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Steps"
+                        android:textColor="#52677D"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+                <!-- Calories card -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_calories_card"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginBottom="2dp"
+                        android:src="@drawable/ic_activity_calories"
+                        android:contentDescription="Calories icon" />
+
+
+                    <TextView
+                        android:id="@+id/txtCalories"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="0"
+                        android:textColor="#24164F"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calories"
+                        android:textColor="#52677D"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+                <!-- Water card -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_steps_cards"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginBottom="2dp"
+                        android:src="@drawable/ic_activity_water"
+                        android:contentDescription="Water icon" />
+
+
+                    <TextView
+                        android:id="@+id/txtWater"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="0"
+                        android:textColor="#24164F"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Water"
+                        android:textColor="#52677D"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <!-- Today's Progress Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/bg_input_field"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <!-- Section Heading -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_nav_insights"
+                        android:contentDescription="Progress icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Today's Progress"
+                        android:textColor="#24164F"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+                <!-- Circular Progress Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <!-- Steps Progress -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    <FrameLayout
+                            android:layout_width="64dp"
+                            android:layout_height="64dp">
+
+                            <ProgressBar
+                                android:id="@+id/progressDashboardSteps"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:max="100"
+                                android:progress="44"
+                                android:progressDrawable="@drawable/bg_progress_circle" />
+
+                            <TextView
+                                android:id="@+id/tvDashboardStepsPercent"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="44%"
+                                android:textColor="#24164F"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="Steps"
+                            android:textColor="#24164F"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDashboardStepsGoal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="3,500 / 8,000"
+                            android:textColor="#77758A"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+
+                    <!-- Calories Progress -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:layout_width="64dp"
+                            android:layout_height="64dp">
+
+                            <ProgressBar
+                                android:id="@+id/progressDashboardCalories"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:max="100"
+                                android:progress="45"
+                                android:progressDrawable="@drawable/bg_progress_calories" />
+
+                            <TextView
+                                android:id="@+id/tvDashboardCaloriesPercent"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="45%"
+                                android:textColor="#24164F"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Calories"
+                            android:textColor="#24164F"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDashboardCaloriesGoal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="180 / 400"
+                            android:textColor="#77758A"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+
+                    <!-- Water Progress -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:layout_width="64dp"
+                            android:layout_height="64dp">
+
+                            <ProgressBar
+                                android:id="@+id/progressDashboardWater"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:max="100"
+                                android:progress="38"
+                                android:progressDrawable="@drawable/bg_progress_water" />
+
+                            <TextView
+                                android:id="@+id/tvDashboardWaterPercent"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="38%"
+                                android:textColor="#24164F"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Water"
+                            android:textColor="#24164F"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDashboardWaterGoal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="750 / 2000 ml"
+                            android:textColor="#77758A"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- First row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/btnAddRecord"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:padding="12dp"
+                    android:backgroundTint="#EEE6FA"
+                    android:background="@drawable/bg_steps_cards"
+                    android:clickable="true"
+                    android:focusable="true">
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="6dp"
+                        android:src="@drawable/ic_add_record"
+                        android:contentDescription="Add Record icon" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Add Record"
+                        android:textColor="#452080"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Log today's health data"
+                        android:textColor="#675787"
+                        android:textSize="12sp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnViewRecords"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:padding="12dp"
+                    android:background="@drawable/bg_steps_cards"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="6dp"
+                        android:src="@drawable/ic_view_records"
+                        android:contentDescription="View Records icon" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="View Records"
+                        android:textColor="#1565C0"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="See all your records"
+                        android:textColor="#52677D"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Second row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/btnSearchRecords"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:padding="12dp"
+                    android:background="@drawable/bg_water_card"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="6dp"
+                        android:src="@drawable/ic_search_records"
+                        android:contentDescription="Search Records icon" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Search Records"
+                        android:textColor="#00875A"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Find records by date"
+                        android:textColor="#52677D"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnHealthInsights"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:padding="12dp"
+                    android:background="@drawable/bg_calories_card"
+                    android:clickable="true"
+                    android:focusable="true">
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="6dp"
+                        android:src="@drawable/ic_health_insights"
+                        android:contentDescription="Health Insights icon" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Health Insights"
+                        android:textColor="#E65100"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="View your progress"
+                        android:textColor="#6D6259"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Fixed footer -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_height="76dp"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:padding="4dp"
+        android:gravity="center_vertical"
+        android:elevation="8dp"
+        android:baselineAligned="false">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="♥  HealthMate"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/bg_dashboard_header"
-            android:padding="24dp"
-            android:layout_marginTop="24dp"
-            android:gravity="center_vertical"/>
+        <LinearLayout
+            android:id="@+id/btnNavDashboard"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="#EEE6FA"
+            android:clickable="true"
+            android:focusable="true">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Your Daily Health Dashboard"
-            android:textSize="16sp"
-            android:textColor="#6750A4"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="24dp"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_dashboard"
+                android:contentDescription="Dashboard" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Today's Activity"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#4A3678"
-            android:layout_marginBottom="16dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Dashboard"
+                android:textColor="#673AB7"
+                android:textSize="11sp"
+                android:singleLine="true"
+                android:gravity="center" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtSteps"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Steps Walked: 0"
-            android:textSize="20sp"
-            android:textColor="#1565C0"
-            android:background="@drawable/bg_steps_cards"
-            android:padding="20dp"
-            android:layout_marginBottom="16dp"/>
+        <LinearLayout
+            android:id="@+id/btnNavRecords"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
 
-        <TextView
-            android:id="@+id/txtCalories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Calories Burned: 0 kcal"
-            android:textSize="20sp"
-            android:textColor="#E65100"
-            android:background="@drawable/bg_calories_card"
-            android:padding="20dp"
-            android:layout_marginBottom="16dp"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_records"
+                android:contentDescription="Records" />
 
-        <TextView
-            android:id="@+id/txtWater"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Water Intake: 0 ml"
-            android:textSize="20sp"
-            android:textColor="#00838F"
-            android:background="@drawable/bg_water_card"
-            android:padding="20dp"
-            android:layout_marginBottom="30dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Records"
+                android:textColor="#666078"
+                android:textSize="11sp"
+                android:singleLine="true"
+                android:gravity="center" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/btnAddRecord"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Health Record"
-            android:textAllCaps="false"/>
+        <LinearLayout
+            android:id="@+id/btnNavInsights"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
 
-        <Button
-            android:id="@+id/btnViewRecords"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="View Health Records"
-            android:textAllCaps="false"
-            android:layout_marginTop="12dp"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_insights"
+                android:contentDescription="Insights" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Insights"
+                android:textColor="#666078"
+                android:textSize="11sp"
+                android:singleLine="true"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnProfile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_nav_profile"
+                android:contentDescription="Profile" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Profile"
+                android:textColor="#666078"
+                android:textSize="11sp"
+                android:singleLine="true"
+                android:gravity="center" />
+        </LinearLayout>
 
     </LinearLayout>
-</ScrollView>
+
+</LinearLayout>

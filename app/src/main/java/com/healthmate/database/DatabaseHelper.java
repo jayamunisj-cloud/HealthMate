@@ -11,13 +11,16 @@ import com.healthmate.PasswordUtils;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "healthmate.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public static final String TABLE_NAME = "health_records";
 
     public static final String TABLE_USERS = "users";
     public static final String COL_USER_ID = "user_id";
     public static final String COL_USERNAME = "username";
+    public static final String COL_FIRST_NAME = "first_name";
+    public static final String COL_LAST_NAME = "last_name";
+    public static final String COL_MOBILE = "mobile";
     public static final String COL_EMAIL = "email";
     public static final String COL_PASSWORD_HASH = "password_hash";
     public static final String COL_PASSWORD_SALT = "password_salt";
@@ -28,7 +31,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_USERNAME + " TEXT NOT NULL, " +
                     COL_EMAIL + " TEXT NOT NULL UNIQUE, " +
                     COL_PASSWORD_HASH + " TEXT NOT NULL, " +
-                    COL_PASSWORD_SALT + " TEXT NOT NULL)";
+                    COL_PASSWORD_SALT + " TEXT NOT NULL, " +
+                    COL_FIRST_NAME + " TEXT, " +
+                    COL_LAST_NAME + " TEXT, " +
+                    COL_MOBILE + " TEXT)";
 
     public static final String COL_ID = "id";
     public static final String COL_DATE = "date";
@@ -61,7 +67,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 2) {
             db.execSQL(CREATE_USERS_TABLE);
         }
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE " + TABLE_USERS +
+                    " ADD COLUMN " + COL_FIRST_NAME + " TEXT");
 
+            db.execSQL("ALTER TABLE " + TABLE_USERS +
+                    " ADD COLUMN " + COL_LAST_NAME + " TEXT");
+
+            db.execSQL("ALTER TABLE " + TABLE_USERS +
+                    " ADD COLUMN " + COL_MOBILE + " TEXT");
+        }
     }
 
     // CREATE: Add a new health record
@@ -154,7 +169,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null
         );
     }
-    public long registerUser(String username, String email, String password) {
+    public long registerUser(String firstName, String lastName,
+                             String email, String mobile, String password) {
 
         String salt = PasswordUtils.generateSalt();
         String passwordHash = PasswordUtils.hashPassword(password, salt);
@@ -162,7 +178,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COL_USERNAME, username);
+        values.put(COL_USERNAME, firstName.trim() + " " + lastName.trim());
+        values.put(COL_FIRST_NAME, firstName.trim());
+        values.put(COL_LAST_NAME, lastName.trim());
+        values.put(COL_MOBILE, mobile.trim());
         values.put(COL_EMAIL, email.trim().toLowerCase(java.util.Locale.ROOT));
         values.put(COL_PASSWORD_HASH, passwordHash);
         values.put(COL_PASSWORD_SALT, salt);
@@ -210,5 +229,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean validateUser(String email, String password) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String normalizedEmail =
+                email.trim().toLowerCase(java.util.Locale.ROOT);
+
+        Cursor cursor = db.query(
+                TABLE_USERS,
+                new String[]{COL_PASSWORD_HASH, COL_PASSWORD_SALT},
+                COL_EMAIL + " = ?",
+                new String[]{normalizedEmail},
+                null,
+                null,
+                null
+        );
+
+        try {
+            if (cursor.moveToFirst()) {
+
+                String storedHash = cursor.getString(0);
+                String storedSalt = cursor.getString(1);
+
+                String enteredHash =
+                        PasswordUtils.hashPassword(password, storedSalt);
+
+                return java.security.MessageDigest.isEqual(
+                        storedHash.getBytes(java.nio.charset.StandardCharsets.UTF_8),
+                        enteredHash.getBytes(java.nio.charset.StandardCharsets.UTF_8)
+                );
+            }
+
+            return false;
+
+        } finally {
+            cursor.close();
+        }
+    }
 
 }

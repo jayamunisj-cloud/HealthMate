@@ -16,6 +16,8 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +33,41 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        TextView tvDashboardDate = findViewById(R.id.tvDashboardDate);
+
+        String currentDate = new SimpleDateFormat(
+                "EEE, MMM d, yyyy",
+                Locale.getDefault()
+        ).format(new Date());
+
+        tvDashboardDate.setText(currentDate);
+
+
+        findViewById(R.id.btnProfile).setOnClickListener(v -> {
+
+            boolean isLoggedIn = getSharedPreferences(
+                    "HealthMateSession",
+                    MODE_PRIVATE
+            ).getBoolean("isLoggedIn", false);
+
+
+            if (isLoggedIn) {
+                Intent intent = new Intent(
+                        MainActivity.this,
+                        ProfileActivity.class
+                );
+                startActivity(intent);
+
+        } else {
+                Intent intent = new Intent(
+                        MainActivity.this,
+                        SignInActivity.class
+                );
+                startActivity(intent);
+            }
+        });
+
+
         databaseHelper = new DatabaseHelper(this);
 
         // Connect dashboard TextViews
@@ -39,14 +76,14 @@ public class MainActivity extends AppCompatActivity {
         txtWater = findViewById(R.id.txtWater);
 
         // Open the Add Health Record Screen
-        Button btnAddRecord = findViewById(R.id.btnAddRecord);
+        LinearLayout btnAddRecord = findViewById(R.id.btnAddRecord);
 
         btnAddRecord.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddRecordActivity.class);
             startActivity(intent);
         });
         // Open View Health Records screen
-        Button btnViewRecords = findViewById(R.id.btnViewRecords);
+        LinearLayout btnViewRecords = findViewById(R.id.btnViewRecords);
 
         btnViewRecords.setOnClickListener(v -> {
             Intent intent = new Intent(
@@ -55,6 +92,37 @@ public class MainActivity extends AppCompatActivity {
             );
             startActivity(intent);
         });
+        findViewById(R.id.btnNavRecords).setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    ViewRecordsActivity.class
+            );
+            startActivity(intent);
+        });
+        findViewById(R.id.btnSearchRecords).setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    ViewRecordsActivity.class
+            );
+            startActivity(intent);
+        });
+
+        findViewById(R.id.btnHealthInsights).setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    InsightsActivity.class
+            );
+            startActivity(intent);
+        });
+
+        findViewById(R.id.btnNavInsights).setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    InsightsActivity.class
+            );
+            startActivity(intent);
+        });
+
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -67,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadDashboardData();
+        loadDashboardGreeting();
     }
     private void loadDashboardData() {
 
@@ -100,14 +169,38 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            txtSteps.setText(
-                    "Steps Walked: " + totalSteps);
+            txtSteps.setText(String.valueOf(totalSteps));
+            txtCalories.setText(String.valueOf(totalCalories));
+            txtWater.setText(totalWater + " ml");
 
-            txtCalories.setText(
-                    "Calories Burned: " + totalCalories + " kcal");
+            int stepsPercent = Math.min(100, Math.round(totalSteps * 100f / 8000));
+            int caloriesPercent = Math.min(100, Math.round(totalCalories * 100f / 400));
+            int waterPercent = Math.min(100, Math.round(totalWater * 100f / 2000));
 
-            txtWater.setText(
-                    "Water Intake: " + totalWater + " ml");
+            ProgressBar stepsProgress = findViewById(R.id.progressDashboardSteps);
+            ProgressBar caloriesProgress = findViewById(R.id.progressDashboardCalories);
+            ProgressBar waterProgress = findViewById(R.id.progressDashboardWater);
+
+            stepsProgress.setProgress(stepsPercent);
+            caloriesProgress.setProgress(caloriesPercent);
+            waterProgress.setProgress(waterPercent);
+
+            TextView stepsPercentText = findViewById(R.id.tvDashboardStepsPercent);
+            TextView caloriesPercentText = findViewById(R.id.tvDashboardCaloriesPercent);
+            TextView waterPercentText = findViewById(R.id.tvDashboardWaterPercent);
+
+            stepsPercentText.setText(stepsPercent + "%");
+            caloriesPercentText.setText(caloriesPercent + "%");
+            waterPercentText.setText(waterPercent + "%");
+
+
+            TextView stepsGoalText = findViewById(R.id.tvDashboardStepsGoal);
+            TextView caloriesGoalText = findViewById(R.id.tvDashboardCaloriesGoal);
+            TextView waterGoalText = findViewById(R.id.tvDashboardWaterGoal);
+
+            stepsGoalText.setText(totalSteps + " / 8000");
+            caloriesGoalText.setText(totalCalories + " / 400");
+            waterGoalText.setText(totalWater + " / 2000 ml");
 
         } catch (Exception e) {
 
@@ -116,6 +209,47 @@ public class MainActivity extends AppCompatActivity {
                     "Unable to load dashboard data",
                     Toast.LENGTH_SHORT
             ).show();
+        }
+    }
+
+    private void loadDashboardGreeting() {
+
+        TextView greeting = findViewById(R.id.tvDashboardGreeting);
+
+        boolean isLoggedIn = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getBoolean("isLoggedIn", false);
+
+        String userEmail = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getString("userEmail", "");
+
+        // Default greeting for guests
+        greeting.setText("Hello, User!");
+
+        if (!isLoggedIn || userEmail.isEmpty()) {
+            return;
+        }
+
+        DatabaseHelper db = new DatabaseHelper(this);
+
+        try (Cursor cursor = db.getUserByEmail(userEmail)) {
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+                String firstName = cursor.getString(
+                        cursor.getColumnIndexOrThrow("first_name")
+                );
+
+                if (firstName != null && !firstName.trim().isEmpty()) {
+                    greeting.setText("Hello, " + firstName.trim() + "!");
+                }
+            }
+
+        } finally {
+            db.close();
         }
     }
 }
