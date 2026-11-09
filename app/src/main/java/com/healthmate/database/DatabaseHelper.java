@@ -131,13 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllRecords() {
 
         // Get the signed-in user's email
-        String email = context.getSharedPreferences(
-                "HealthMateSession",
-                Context.MODE_PRIVATE
-        ).getString("userEmail", null);
-
-        // Find the signed-in user's ID
-        long userId = getUserIdByEmail(email);
+        long userId = getCurrentUserId();
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -173,13 +167,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             int steps, int calories, int water) {
 
         // Get the currently signed-in user's email
-        String email = context.getSharedPreferences(
-                "HealthMateSession",
-                Context.MODE_PRIVATE
-        ).getString("userEmail", null);
-
-        // Find the signed-in user's ID
-        long userId = getUserIdByEmail(email);
+        long userId = getCurrentUserId();
 
         // Never update records without a valid user
         if (userId == -1) {
@@ -211,13 +199,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int deleteRecord(int id) {
 
         // Get the currently signed-in user's email
-        String email = context.getSharedPreferences(
-                "HealthMateSession",
-                Context.MODE_PRIVATE
-        ).getString("userEmail", null);
-
-        // Find the signed-in user's ID
-        long userId = getUserIdByEmail(email);
+        long userId = getCurrentUserId();
 
         // Never delete records without a valid user
         if (userId == -1) {
@@ -243,13 +225,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getRecordsByDate(String date) {
 
         // Get the currently signed-in user's email
-        String email = context.getSharedPreferences(
-                "HealthMateSession",
-                Context.MODE_PRIVATE
-        ).getString("userEmail", null);
-
-        // Find the signed-in user's ID
-        long userId = getUserIdByEmail(email);
+        long userId = getCurrentUserId();
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -284,12 +260,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getRecordById(int id) {
 
-        String email = context.getSharedPreferences(
-                "HealthMateSession",
-                Context.MODE_PRIVATE
-        ).getString("userEmail", null);
-
-        long userId = getUserIdByEmail(email);
+        long userId = getCurrentUserId();
 
         SQLiteDatabase db = this.getReadableDatabase();
 
