@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.util.Locale;
 import android.app.DatePickerDialog;
 import java.util.Calendar;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,11 +26,6 @@ public class ViewRecordsActivity extends AppCompatActivity {
 
     private LinearLayout recordsContainer;
     private DatabaseHelper databaseHelper;
-    private String selectedSearchDate = null;
-
-    private EditText etSearchDate;
-    private Button btnSearchRecords;
-    private Button btnShowAllRecords;
 
 
     @Override
@@ -63,86 +59,18 @@ public class ViewRecordsActivity extends AppCompatActivity {
             return;
         }
         setContentView(R.layout.activity_view_records);
+        ImageButton btnBack = findViewById(R.id.btnBack);
+
+        btnBack.setOnClickListener(v -> {
+            getOnBackPressedDispatcher().onBackPressed();
+        });
 
         recordsContainer =
                 findViewById(R.id.recordsContainer);
 
         databaseHelper = new DatabaseHelper(this);
-
-        // Initialize Search by Date controls
-        etSearchDate = findViewById(R.id.etSearchDate);
-        etSearchDate.setOnClickListener(v -> {
-
-            Calendar calendar = Calendar.getInstance();
-
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePicker = new DatePickerDialog(
-                    ViewRecordsActivity.this,
-                    (view, selectedYear, selectedMonth, selectedDay) -> {
-
-                        String selectedDate = String.format(
-                                Locale.US,
-                                "%04d-%02d-%02d",
-                                selectedYear,
-                                selectedMonth + 1,
-                                selectedDay
-                        );
-
-                        etSearchDate.setText(selectedDate);
-                    },
-                    year,
-                    month,
-                    day
-            );
-
-            datePicker.show();
-        });
-        btnSearchRecords = findViewById(R.id.btnSearchRecords);
-        btnShowAllRecords = findViewById(R.id.btnShowAllRecords);
-        btnShowAllRecords.setOnClickListener(v -> {
-            selectedSearchDate = null;
-            etSearchDate.setText("");
-            displayRecords();
-        });
-
-        // Search Records button click
-        btnSearchRecords.setOnClickListener(v -> {
-
-            String searchDate = etSearchDate.getText()
-                    .toString()
-                    .trim();
-
-            if (searchDate.isEmpty()) {
-                etSearchDate.setError("Please enter a date");
-                return;
-            }
-            if (!searchDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                Toast.makeText(this,
-                        "Please enter a valid date (YYYY-MM-DD)",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
-            selectedSearchDate = searchDate;
-            displayRecords();
-            try {
-                SimpleDateFormat dateFormat =
-                        new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-
-                dateFormat.setLenient(false);
-                dateFormat.parse(searchDate);
-
-            } catch (ParseException e) {
-                Toast.makeText(this,
-                        "Please enter a real calendar date",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-        });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -176,20 +104,15 @@ public class ViewRecordsActivity extends AppCompatActivity {
 
         recordsContainer.removeAllViews();
 
-        try (Cursor cursor = selectedSearchDate == null
-                ? databaseHelper.getAllRecords()
-                : databaseHelper.getRecordsByDate(selectedSearchDate)) {
+        try (Cursor cursor = databaseHelper.getAllRecords()) {
 
             if (cursor.getCount() == 0) {
                 TextView emptyMessage = new TextView(this);
-                emptyMessage.setText(selectedSearchDate == null
-                        ? "No health records saved yet."
-                        : "No health records found for " + selectedSearchDate);
+                emptyMessage.setText("No health records saved yet.");
                 emptyMessage.setTextSize(18);
                 recordsContainer.addView(emptyMessage);
                 return;
             }
-
 
             int idIndex = cursor.getColumnIndexOrThrow(
                     DatabaseHelper.COL_ID);
@@ -290,32 +213,6 @@ public class ViewRecordsActivity extends AppCompatActivity {
             Toast.makeText(
                     this,
                     "Unable to load health records",
-                    Toast.LENGTH_SHORT
-            ).show();
-        }
-    }
-    private void displayRecordsByDate(String date) {
-
-        try (Cursor cursor = databaseHelper.getRecordsByDate(date)) {
-
-            if (cursor == null) {
-                return;
-            }
-
-            recordsContainer.removeAllViews();
-
-            if (cursor.getCount() == 0) {
-                TextView emptyMessage = new TextView(this);
-                emptyMessage.setText("No health records found for " + date);
-                emptyMessage.setTextSize(18);
-                recordsContainer.addView(emptyMessage);
-                return;
-            }
-
-        } catch (Exception e) {
-            Toast.makeText(
-                    this,
-                    "Unable to search health records",
                     Toast.LENGTH_SHORT
             ).show();
         }

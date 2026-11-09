@@ -19,7 +19,7 @@ import com.healthmate.database.DatabaseHelper;
 import android.app.DatePickerDialog;
 import java.util.Calendar;
 import android.content.Intent;
-
+import android.widget.ImageButton;
 
 public class EditRecordActivity extends AppCompatActivity {
 
@@ -66,6 +66,11 @@ public class EditRecordActivity extends AppCompatActivity {
         }
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_record);
+        ImageButton btnBack = findViewById(R.id.btnBack);
+
+        btnBack.setOnClickListener(v -> {
+            getOnBackPressedDispatcher().onBackPressed();
+        });
         databaseHelper = new DatabaseHelper(this);
 
         etEditDate = findViewById(R.id.etEditDate);

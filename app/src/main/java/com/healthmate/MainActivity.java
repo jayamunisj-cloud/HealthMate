@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnSearchRecords).setOnClickListener(v -> {
             Intent intent = new Intent(
                     MainActivity.this,
-                    ViewRecordsActivity.class
+                    SearchRecordsActivity.class
             );
             startActivity(intent);
         });

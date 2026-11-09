@@ -20,6 +20,7 @@ import android.app.DatePickerDialog;
 import java.util.Calendar;
 import java.util.Locale;
 import android.content.Intent;
+import android.widget.ImageButton;
 
 public class AddRecordActivity extends AppCompatActivity {
 
@@ -60,6 +61,10 @@ public class AddRecordActivity extends AppCompatActivity {
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_record);
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            getOnBackPressedDispatcher().onBackPressed();
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(
                 findViewById(R.id.main), (v, insets) -> {
