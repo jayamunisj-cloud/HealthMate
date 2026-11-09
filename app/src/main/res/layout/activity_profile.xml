@@ -116,7 +116,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="20dp"
             android:padding="20dp"
             android:orientation="vertical"
             android:background="@drawable/bg_input_field">
@@ -156,7 +156,7 @@
                         android:layout_height="wrap_content"
                         android:text="Email Address"
                         android:textColor="#777777"
-                        android:textSize="13sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tvProfileEmail"
@@ -165,7 +165,7 @@
                         android:layout_marginTop="6dp"
                         android:text="email@example.com"
                         android:textColor="#1D1748"
-                        android:textSize="16sp" />
+                        android:textSize="17sp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -196,7 +196,7 @@
                         android:layout_height="wrap_content"
                         android:text="Mobile Number"
                         android:textColor="#777777"
-                        android:textSize="13sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tvProfileMobile"
@@ -205,7 +205,7 @@
                         android:layout_marginTop="6dp"
                         android:text="Not provided"
                         android:textColor="#1D1748"
-                        android:textSize="16sp" />
+                        android:textSize="17sp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -236,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:text="Date of Birth"
                         android:textColor="#777777"
-                        android:textSize="13sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tvProfileDob"
@@ -245,30 +245,20 @@
                         android:layout_marginTop="6dp"
                         android:text="Not provided"
                         android:textColor="#1D1748"
-                        android:textSize="16sp" />
+                        android:textSize="17sp" />
 
                 </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Logout button -->
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="24dp"
-            android:text="Log Out"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#673AB7" />
-
         <!-- Edit Profile button -->
         <Button
             android:id="@+id/btnEditProfile"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
             android:text="Edit Profile"
             android:textAllCaps="false"
             android:textColor="#673AB7"
@@ -279,12 +269,26 @@
             android:id="@+id/btnOpenChangePassword"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="6dp"
             android:text="Change Password"
             android:textAllCaps="false"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textColor="#6C4AD2"
             android:backgroundTint="#E8DEFF" />
+
+        <!-- Logout button -->
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="6dp"
+            android:textSize="16sp"
+            android:text="Log Out"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#673AB7" />
+
+
 
     </LinearLayout>
 </ScrollView>

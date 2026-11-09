@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/bg_health_record_card"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Card heading -->
+    <!-- Card heading with calendar icon -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvRecordTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Daily Health Record"
+            android:textColor="#1764C0"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="▦"
+            android:textColor="#1764C0"
+            android:textSize="22sp" />
+
+    </LinearLayout>
+    <!-- Record date -->
+    <TextView
+        android:id="@+id/tvRecordDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="9 November 2026"
+        android:textColor="#64748B"
+        android:textSize="13sp" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="18dp"
+        android:background="#E2E8F0" />
+
+    <!-- Steps -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="14dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Steps Walked"
+            android:textColor="#334155"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvRecordSteps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1,000"
+            android:textColor="#0F172A"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Calories -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="14dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Calories Burned"
+            android:textColor="#334155"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvRecordCalories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2,000 kcal"
+            android:textColor="#0F172A"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Water -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Water Intake"
+            android:textColor="#334155"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvRecordWater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1,230 ml"
+            android:textColor="#0F172A"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -14,6 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.healthmate.database.DatabaseHelper;
 import android.widget.ImageButton;
+import android.view.LayoutInflater;
+import android.view.View;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -168,30 +173,13 @@ public class SearchRecordsActivity extends AppCompatActivity {
                             )
                     );
 
-                    TextView recordView = new TextView(this);
-
-                    recordView.setText(
-                            "Date: " + date +
-                                    "\nSteps Walked: " + steps +
-                                    "\nCalories Burned: " + calories + " kcal" +
-                                    "\nWater Intake: " + water + " ml"
+                    addSearchRecordCard(
+                            searchResultsContainer,
+                            date,
+                            steps,
+                            calories,
+                            water
                     );
-
-                    recordView.setTextSize(16);
-                    recordView.setPadding(20, 20, 20, 20);
-                    recordView.setBackgroundColor(
-                            android.graphics.Color.WHITE
-                    );
-
-                    LinearLayout.LayoutParams params =
-                            new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT,
-                                    LinearLayout.LayoutParams.WRAP_CONTENT
-                            );
-
-                    params.setMargins(0, 0, 0, 16);
-
-                    searchResultsContainer.addView(recordView, params);
                 }
 
             } catch (Exception e) {
@@ -247,30 +235,13 @@ public class SearchRecordsActivity extends AppCompatActivity {
                 int calories = cursor.getInt(caloriesIndex);
                 int water = cursor.getInt(waterIndex);
 
-                TextView recordView = new TextView(this);
-
-                recordView.setText(
-                        "Date: " + date +
-                                "\nSteps Walked: " + steps +
-                                "\nCalories Burned: " + calories + " kcal" +
-                                "\nWater Intake: " + water + " ml"
+                addSearchRecordCard(
+                        resultsContainer,
+                        date,
+                        steps,
+                        calories,
+                        water
                 );
-
-                recordView.setTextSize(16);
-                recordView.setPadding(20, 20, 20, 20);
-                recordView.setBackgroundColor(
-                        android.graphics.Color.WHITE
-                );
-
-                LinearLayout.LayoutParams params =
-                        new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                        );
-
-                params.setMargins(0, 0, 0, 16);
-
-                resultsContainer.addView(recordView, params);
             }
 
         } catch (Exception e) {
@@ -284,5 +255,59 @@ public class SearchRecordsActivity extends AppCompatActivity {
         } finally {
             db.close();
         }
+    }
+    private void addSearchRecordCard(
+            LinearLayout container,
+            String date,
+            int steps,
+            int calories,
+            int water) {
+
+        View recordCard = LayoutInflater.from(this)
+                .inflate(R.layout.item_search_record, container, false);
+
+        TextView tvDate = recordCard.findViewById(R.id.tvRecordDate);
+        TextView tvSteps = recordCard.findViewById(R.id.tvRecordSteps);
+        TextView tvCalories = recordCard.findViewById(R.id.tvRecordCalories);
+        TextView tvWater = recordCard.findViewById(R.id.tvRecordWater);
+
+        String displayDate = date;
+
+        try {
+            SimpleDateFormat inputFormat =
+                    new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
+            inputFormat.setLenient(false);
+
+            java.util.Date parsedDate = inputFormat.parse(date);
+
+            if (parsedDate != null) {
+                SimpleDateFormat outputFormat =
+                        new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
+
+                displayDate = outputFormat.format(parsedDate);
+            }
+
+        } catch (ParseException e) {
+            // Keep original date if formatting fails.
+        }
+
+        tvDate.setText(displayDate);
+
+        NumberFormat numberFormat = NumberFormat.getIntegerInstance();
+
+        tvSteps.setText(numberFormat.format(steps));
+        tvCalories.setText(numberFormat.format(calories) + " kcal");
+        tvWater.setText(numberFormat.format(water) + " ml");
+
+        LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+
+        params.setMargins(0, 0, 0, 16);
+
+        container.addView(recordCard, params);
     }
 }

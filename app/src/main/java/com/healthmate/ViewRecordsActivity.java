@@ -11,16 +11,17 @@ import android.widget.Button;
 import android.content.Intent;
 import androidx.appcompat.app.AlertDialog;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.graphics.drawable.GradientDrawable;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import android.app.DatePickerDialog;
-import java.util.Calendar;
-import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.healthmate.database.DatabaseHelper;
+import android.view.LayoutInflater;
+import java.text.NumberFormat;
 
 public class ViewRecordsActivity extends AppCompatActivity {
 
@@ -135,37 +136,57 @@ public class ViewRecordsActivity extends AppCompatActivity {
                 int calories = cursor.getInt(caloriesIndex);
                 int water = cursor.getInt(waterIndex);
 
-                TextView recordView = new TextView(this);
+                // Create the new record card layout
+                android.view.View recordCard = LayoutInflater.from(this)
+                        .inflate(R.layout.item_health_record, recordsContainer, false);
 
-                recordView.setText(
-                        "Date: " + date +
-                                "\nSteps Walked: " + steps +
-                                "\nCalories Burned: " + calories + " kcal" +
-                                "\nWater Intake: " + water + " ml"
+// Connect the card's TextViews
+                TextView tvDate = recordCard.findViewById(R.id.tvRecordDate);
+                TextView tvSteps = recordCard.findViewById(R.id.tvRecordSteps);
+                TextView tvCalories = recordCard.findViewById(R.id.tvRecordCalories);
+                TextView tvWater = recordCard.findViewById(R.id.tvRecordWater);
+
+// Format and display the record date
+                String displayDate = date;
+
+                try {
+                    SimpleDateFormat inputFormat =
+                            new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
+                    inputFormat.setLenient(false);
+
+                    java.util.Date parsedDate = inputFormat.parse(date);
+
+                    if (parsedDate != null) {
+                        SimpleDateFormat outputFormat =
+                                new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
+
+                        displayDate = outputFormat.format(parsedDate);
+                    }
+                } catch (ParseException e) {
+                    // Keep the original date if formatting fails
+                }
+
+                tvDate.setText(displayDate);
+
+// Display actual SQLite values
+                NumberFormat numberFormat = NumberFormat.getIntegerInstance();
+
+                tvSteps.setText(numberFormat.format(steps));
+
+                tvCalories.setText(
+                        numberFormat.format(calories) + " kcal"
                 );
 
-                recordView.setTextSize(16);
-                recordView.setTextColor(
-                        Color.rgb(38, 50, 56)
+                tvWater.setText(
+                        numberFormat.format(water) + " ml"
                 );
 
-                recordView.setPadding(20, 20, 20, 20);
-                recordView.setBackgroundColor(Color.WHITE);
+// Connect Edit and Delete buttons
+                Button btnEdit = recordCard.findViewById(R.id.btnRecordEdit);
+                Button btnDelete = recordCard.findViewById(R.id.btnRecordDelete);
 
-                LinearLayout.LayoutParams params =
-                        new LinearLayout.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT
-                        );
-
-                params.setMargins(0, 0, 0, 20);
-
-                recordsContainer.addView(recordView, params);
-
-                Button btnEdit = new Button(this);
-                btnEdit.setText("Edit Record");
-
-
+// Keep Edit functionality
                 btnEdit.setOnClickListener(v -> {
                     Intent intent = new Intent(
                             ViewRecordsActivity.this,
@@ -173,39 +194,40 @@ public class ViewRecordsActivity extends AppCompatActivity {
                     );
 
                     intent.putExtra("record_id", recordId);
-
                     startActivity(intent);
-
                 });
-                Button btnDelete = new Button(this);
-                btnDelete.setText("DELETE RECORD");
 
+// Keep Delete confirmation and functionality
                 btnDelete.setOnClickListener(v -> {
                     new AlertDialog.Builder(this)
                             .setTitle("Delete Health Record")
                             .setMessage("Are you sure you want to delete this record?")
                             .setPositiveButton("Delete", (dialog, which) -> {
+
                                 int result = databaseHelper.deleteRecord(recordId);
 
                                 if (result > 0) {
-                                    Toast.makeText(this,
+                                    Toast.makeText(
+                                            this,
                                             "Health record deleted successfully",
-                                            Toast.LENGTH_SHORT).show();
+                                            Toast.LENGTH_SHORT
+                                    ).show();
 
                                     displayRecords();
                                 } else {
-                                    Toast.makeText(this,
+                                    Toast.makeText(
+                                            this,
                                             "Failed to delete record",
-                                            Toast.LENGTH_SHORT).show();
+                                            Toast.LENGTH_SHORT
+                                    ).show();
                                 }
                             })
                             .setNegativeButton("Cancel", null)
                             .show();
                 });
 
-                recordsContainer.addView(btnEdit);
-
-                recordsContainer.addView(btnDelete);
+// Add the complete card to the screen
+                recordsContainer.addView(recordCard);
 
             }
 
