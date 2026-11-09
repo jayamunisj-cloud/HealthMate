@@ -240,8 +240,28 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        // Avoid loading data if the screen was closed
-        // before the views were initialized
+        boolean isLoggedIn = getSharedPreferences(
+                "HealthMateSession",
+                MODE_PRIVATE
+        ).getBoolean("isLoggedIn", false);
+
+        if (!isLoggedIn) {
+            Intent intent = new Intent(
+                    ProfileActivity.this,
+                    MainActivity.class
+            );
+
+            intent.addFlags(
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            | Intent.FLAG_ACTIVITY_NEW_TASK
+                            | Intent.FLAG_ACTIVITY_CLEAR_TASK
+            );
+
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         if (tvProfileName != null) {
             loadProfileData();
         }
