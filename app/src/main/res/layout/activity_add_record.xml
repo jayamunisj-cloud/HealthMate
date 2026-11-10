@@ -118,6 +118,8 @@
             android:id="@+id/btnSaveRecord"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/save_button_purple"
+            android:textColor="@color/white"
             android:text="Save Health Record"
             android:textAllCaps="false"/>
 

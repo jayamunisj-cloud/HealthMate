@@ -26,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtCalories;
     private TextView txtWater;
 
+    // HealthMate daily tracking goals
+    private static final int STEPS_GOAL = 7500;
+    private static final int CALORIES_GOAL = 1800;
+    private static final int WATER_GOAL = 4000;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -173,9 +178,15 @@ public class MainActivity extends AppCompatActivity {
             txtCalories.setText(String.valueOf(totalCalories));
             txtWater.setText(totalWater + " ml");
 
-            int stepsPercent = Math.min(100, Math.round(totalSteps * 100f / 8000));
-            int caloriesPercent = Math.min(100, Math.round(totalCalories * 100f / 400));
-            int waterPercent = Math.min(100, Math.round(totalWater * 100f / 2000));
+            int stepsPercent = Math.min(100,
+                    Math.round(totalSteps * 100f / STEPS_GOAL));
+
+            int caloriesPercent = Math.min(100,
+                    Math.round(totalCalories * 100f / CALORIES_GOAL));
+
+            int waterPercent = Math.min(100,
+                    Math.round(totalWater * 100f / WATER_GOAL));
+
 
             ProgressBar stepsProgress = findViewById(R.id.progressDashboardSteps);
             ProgressBar caloriesProgress = findViewById(R.id.progressDashboardCalories);
@@ -198,9 +209,12 @@ public class MainActivity extends AppCompatActivity {
             TextView caloriesGoalText = findViewById(R.id.tvDashboardCaloriesGoal);
             TextView waterGoalText = findViewById(R.id.tvDashboardWaterGoal);
 
-            stepsGoalText.setText(totalSteps + " / 8000");
-            caloriesGoalText.setText(totalCalories + " / 400");
-            waterGoalText.setText(totalWater + " / 2000 ml");
+
+            stepsGoalText.setText(totalSteps + " / " + STEPS_GOAL);
+
+            caloriesGoalText.setText(totalCalories + " / " + CALORIES_GOAL);
+
+            waterGoalText.setText(totalWater + " / " + WATER_GOAL + " ml");
 
         } catch (Exception e) {
 
@@ -226,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
                 MODE_PRIVATE
         ).getString("userEmail", "");
 
-        // Default greeting for guests
         greeting.setText("Hello, User!");
 
         if (!isLoggedIn || userEmail.isEmpty()) {

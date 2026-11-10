@@ -55,6 +55,8 @@
         android:id="@+id/btnSearchRecords"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/save_button_purple"
+        android:textColor="@color/white"
         android:text="Search Records"
         android:layout_marginBottom="16dp" />
 
@@ -62,6 +64,8 @@
         android:id="@+id/btnShowAllRecords"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/save_button_purple"
+        android:textColor="@color/white"
         android:text="Show All Records"
         android:layout_marginBottom="16dp"/>
 

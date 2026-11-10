@@ -118,7 +118,6 @@ public class ProfileActivity extends AppCompatActivity {
         tvBackToDashboard.setOnClickListener(v -> finish());
 
         // Log out
-        // Log out securely
         btnLogout.setOnClickListener(v -> {
 
             boolean sessionCleared = getSharedPreferences(
@@ -340,7 +339,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                     if (dob != null && !dob.trim().isEmpty()) {
 
-                        // Convert YYYY-MM-DD to DD/MM/YYYY
                         String[] parts = dob.split("-");
 
                         if (parts.length == 3) {

@@ -136,17 +136,14 @@ public class ViewRecordsActivity extends AppCompatActivity {
                 int calories = cursor.getInt(caloriesIndex);
                 int water = cursor.getInt(waterIndex);
 
-                // Create the new record card layout
                 android.view.View recordCard = LayoutInflater.from(this)
                         .inflate(R.layout.item_health_record, recordsContainer, false);
 
-// Connect the card's TextViews
                 TextView tvDate = recordCard.findViewById(R.id.tvRecordDate);
                 TextView tvSteps = recordCard.findViewById(R.id.tvRecordSteps);
                 TextView tvCalories = recordCard.findViewById(R.id.tvRecordCalories);
                 TextView tvWater = recordCard.findViewById(R.id.tvRecordWater);
 
-// Format and display the record date
                 String displayDate = date;
 
                 try {
@@ -226,7 +223,6 @@ public class ViewRecordsActivity extends AppCompatActivity {
                             .show();
                 });
 
-// Add the complete card to the screen
                 recordsContainer.addView(recordCard);
 
             }

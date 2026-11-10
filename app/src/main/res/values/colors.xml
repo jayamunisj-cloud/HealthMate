@@ -2,4 +2,31 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Main application colours -->
+    <color name="primary">#00796B</color>
+    <color name="primary_dark">#004D40</color>
+    <color name="primary_light">#E0F2F1</color>
+    <color name="accent">#0288D1</color>
+
+    <!-- Background and text -->
+    <color name="background">#F5F9FA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="text_primary">#263238</color>
+    <color name="text_secondary">#607D8B</color>
+
+    <!-- Health tracking categories -->
+    <color name="steps_color">#00897B</color>
+    <color name="calories_color">#FB8C00</color>
+    <color name="water_color">#039BE5</color>
+
+    <!-- Additional UI colours -->
+    <color name="success">#388E3C</color>
+    <color name="error">#D32F2F</color>
+    <color name="progress_background">#E0E7EA</color>
+
+    <color name="previous_button">#607D8B</color>
+    <color name="search_button">#1565C0</color>
+    <color name="show_all_button">#7B1FA2</color>
+    <color name="save_button_purple">#7B1FA2</color>
 </resources>

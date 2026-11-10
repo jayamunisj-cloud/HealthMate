@@ -174,7 +174,6 @@ public class SignUpActivity extends AppCompatActivity {
         String confirmPassword = etConfirmPassword.getText()
                 .toString();
 
-        // Check required fields
         // Mobile number is optional
         if (firstName.isEmpty()
                 || lastName.isEmpty()
@@ -233,7 +232,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Validate password length
 
-        // Password must have at least 12 characters
         if (password.length() < 10) {
             etPassword.setError(
                     "Password must contain at least 10 characters"

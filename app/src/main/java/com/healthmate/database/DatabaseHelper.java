@@ -16,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME = "health_records";
 
     public static final String TABLE_USERS = "users";
+
     public static final String COL_USER_ID = "user_id";
     public static final String COL_USERNAME = "username";
     public static final String COL_FIRST_NAME = "first_name";
@@ -105,7 +106,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public long addRecord(String date, int steps,
                           int calories, int water) {
 
-        // Get the currently signed-in user's email
         long userId = getCurrentUserId();
 
         // Never save a record without a valid user
@@ -166,10 +166,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int updateRecord(int id, String date,
                             int steps, int calories, int water) {
 
-        // Get the currently signed-in user's email
         long userId = getCurrentUserId();
 
-        // Never update records without a valid user
         if (userId == -1) {
             return 0;
         }
@@ -201,14 +199,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Get the currently signed-in user's email
         long userId = getCurrentUserId();
 
-        // Never delete records without a valid user
         if (userId == -1) {
             return 0;
         }
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Delete only if the record belongs to this user
+
         return db.delete(
                 TABLE_NAME,
                 COL_ID + "=? AND " + COL_USER_ID + "=?",
@@ -256,7 +253,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_ID + " DESC"
         );
     }
-
 
     public Cursor getRecordById(int id) {
 

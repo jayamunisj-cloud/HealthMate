@@ -68,7 +68,6 @@ public class SignInActivity extends AppCompatActivity {
             return;
         }
 
-        // Verify account using SQLite
         DatabaseHelper databaseHelper =
                 new DatabaseHelper(this);
 

@@ -27,9 +27,9 @@ public class InsightsActivity extends AppCompatActivity {
     private ProgressBar progressWater;
 
     // Example daily goals
-    private static final int STEPS_GOAL = 8000;
-    private static final int CALORIES_GOAL = 400;
-    private static final int WATER_GOAL = 2000;
+    private static final int STEPS_GOAL = 7500;
+    private static final int CALORIES_GOAL = 1800;
+    private static final int WATER_GOAL = 4000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
